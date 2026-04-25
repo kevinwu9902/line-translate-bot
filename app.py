@@ -10,6 +10,14 @@ CHANNEL_SECRET = "73662289cc8fc4ddff7007fc96154d48"
 
 translator = Translator()
 
+# ✅ 放在外面（不要放在 webhook 裡）
+def is_chinese(text):
+    for ch in text:
+        if '\u4e00' <= ch <= '\u9fff':
+            return True
+    return False
+
+
 @app.route("/webhook", methods=['POST'])
 def webhook():
     data = request.json
@@ -20,21 +28,13 @@ def webhook():
                 
                 user_text = event['message']['text']
                 
-                # 自動翻譯（中⇄泰）
-                def is_chinese(text):
-    for ch in text:
-        if '\u4e00' <= ch <= '\u9fff':
-            return True
-    return False
-
-
-if is_chinese(user_text):
-    translated = translator.translate(user_text, dest='th').text
-else:
-    translated = translator.translate(user_text, dest='zh-tw').text
+                # ✅ 正確翻譯邏輯
+                if is_chinese(user_text):
+                    translated = translator.translate(user_text, dest='th').text
+                else:
+                    translated = translator.translate(user_text, dest='zh-tw').text
 
                 reply_token = event['replyToken']
-
                 reply(reply_token, translated)
 
     return "OK"
