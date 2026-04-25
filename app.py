@@ -21,12 +21,17 @@ def webhook():
                 user_text = event['message']['text']
                 
                 # 自動翻譯（中⇄泰）
-                detected = translator.detect(user_text).lang
-                
-                if detected == 'zh-cn' or detected == 'zh-tw':
-                    translated = translator.translate(user_text, dest='th').text
-                else:
-                    translated = translator.translate(user_text, dest='zh-tw').text
+                def is_chinese(text):
+    for ch in text:
+        if '\u4e00' <= ch <= '\u9fff':
+            return True
+    return False
+
+
+if is_chinese(user_text):
+    translated = translator.translate(user_text, dest='th').text
+else:
+    translated = translator.translate(user_text, dest='zh-tw').text
 
                 reply_token = event['replyToken']
 
