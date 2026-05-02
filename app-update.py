@@ -25,6 +25,10 @@ def should_translate(text):
         return False
     return True
 
+@app.route("/")
+def home():
+    return "Bot is running"
+    
 @app.route("/webhook", methods=['POST'])
 def webhook():
     data = request.json
