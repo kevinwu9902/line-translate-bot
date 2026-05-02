@@ -84,11 +84,16 @@ def home():
 @app.route("/webhook", methods=['POST'])
 def webhook():
     data = request.json
+    
+    print("=== 收到Webhook ===")   # 👈 加這行（確認LINE有打進來）
+    print(data)                  # 👈 加這行（看完整內容）
 
     for event in data['events']:
+        print("事件內容:", event)   # 👈 加這行
         if event['type'] == 'message' and event['message']['type'] == 'text':
 
             user_text = event['message']['text']
+            print("收到訊息:", user_text)   # 👈 加這行（關鍵）
 
             if not should_translate(user_text):
                 continue
@@ -117,6 +122,7 @@ def webhook():
                 continue
 
             reply_token = event['replyToken']
+            print("準備回覆:", translated)   # 👈 加這行
             reply(reply_token, translated)
 
     return "OK"
