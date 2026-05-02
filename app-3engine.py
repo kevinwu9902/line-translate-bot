@@ -143,7 +143,8 @@ def reply(reply_token, text):
         }]
     }
 
-    requests.post(url, headers=headers, json=body)
+    response = requests.post(url, headers=headers, json=body)
+    print("LINE回應:", response.text)
 
 
 if __name__ == "__main__":
