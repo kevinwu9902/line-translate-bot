@@ -77,6 +77,9 @@ def smart_translate(text, source, target):
 
     return None
 
+@app.route("/")
+def home():
+    return "Bot is running"
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
